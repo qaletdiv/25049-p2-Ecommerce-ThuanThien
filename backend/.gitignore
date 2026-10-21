@@ -1,0 +1,4 @@
+node_modules/
+
+# Tài khoản người dùng (email + mật khẩu đã băm), không commit
+users.json
