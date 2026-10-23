@@ -169,8 +169,8 @@ export default function OrderPage() {
         <Link href="/products" className="bg-foreground px-6 py-3 font-semibold text-background hover:opacity-90">
           Tiếp tục mua sắm
         </Link>
-        <Link href="/profile" className="border border-foreground px-6 py-3 font-semibold hover:bg-surface">
-          Đơn hàng của tôi
+        <Link href="/profile?tab=orders" className="border border-foreground px-6 py-3 font-semibold hover:bg-surface">
+          Xem lịch sử đơn hàng
         </Link>
       </div>
     </div>

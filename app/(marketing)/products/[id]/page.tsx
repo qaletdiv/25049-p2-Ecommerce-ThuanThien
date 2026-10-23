@@ -32,6 +32,20 @@ export default async function ProductDetailPage({ params }: PageProps<"/products
   const onSale = product.discountPercentage > 0;
   const categoryLabel = categoryLabels[product.category] ?? product.category;
   const images = product.images.length > 0 ? product.images : [product.thumbnail];
+  // Specifications table: only the fields this product has.
+  const specs = [
+    { label: "Thương hiệu", value: product.brand },
+    { label: "Mã sản phẩm (SKU)", value: product.sku },
+    { label: "Danh mục", value: categoryLabel },
+    {
+      label: "Kích thước (R × C × S)",
+      value: product.dimensions &&
+        `${product.dimensions.width} × ${product.dimensions.height} × ${product.dimensions.depth} cm`,
+    },
+    { label: "Bảo hành", value: product.warrantyInformation },
+    { label: "Vận chuyển", value: product.shippingInformation },
+    { label: "Đổi trả", value: product.returnPolicy },
+  ].filter((s) => s.value);
   // Up to 4 other products from the same category.
   const related = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
 
@@ -94,6 +108,18 @@ export default async function ProductDetailPage({ params }: PageProps<"/products
       <section aria-labelledby="details" className="mt-16">
         <h2 id="details" className="text-2xl font-semibold">Chi tiết sản phẩm</h2>
         <p className="mt-4 max-w-3xl leading-relaxed text-muted">{product.description}</p>
+      </section>
+
+      <section aria-labelledby="specs" className="mt-12">
+        <h2 id="specs" className="text-2xl font-semibold">Thông số kỹ thuật</h2>
+        <dl className="mt-4 max-w-3xl divide-y divide-border border-y border-border text-sm">
+          {specs.map((s) => (
+            <div key={s.label} className="grid gap-1 py-3 sm:grid-cols-[14rem_1fr] sm:gap-4">
+              <dt className="text-muted">{s.label}</dt>
+              <dd className="font-medium">{s.value}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       {related.length > 0 && (
