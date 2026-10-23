@@ -2,3 +2,6 @@ node_modules/
 
 # Tài khoản người dùng (email + mật khẩu đã băm), không commit
 users.json
+
+# Dữ liệu thật (tài khoản, giỏ hàng, đơn hàng), không commit
+data.json
