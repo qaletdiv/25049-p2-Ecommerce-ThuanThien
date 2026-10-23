@@ -25,7 +25,7 @@ export default async function Home() {
         <h2 id="top-rated" className="text-2xl font-semibold">Sản phẩm yêu thích</h2>
         <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">
           {topRated.map((p) => (
-            <ProductCard key={p.id} product={p} buyNow />
+            <ProductCard key={p.id} product={p} addToCart />
           ))}
         </div>
       </section>

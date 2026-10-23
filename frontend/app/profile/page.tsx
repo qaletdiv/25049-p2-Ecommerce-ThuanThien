@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Heart, Lock, LogOut, Package, ShoppingBag, User as UserIcon } from "lucide-react";
 import OrderList from "@/app/components/profile/OrderList";
 import PasswordForm from "@/app/components/profile/PasswordForm";
@@ -26,8 +26,13 @@ const menuItemClass =
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState("");
-  const [tab, setTab] = useState<Tab>("info");
   const router = useRouter();
+  // /profile?tab=orders opens the order history (link on the order page). Other values → "info".
+  const searchParams = useSearchParams();
+  const [tab, setTab] = useState<Tab>(() => {
+    const fromUrl = searchParams.get("tab");
+    return tabs.some((t) => t.id === fromUrl) ? (fromUrl as Tab) : "info";
+  });
   const { wishlist } = useShop();
   const cartCount = useAppSelector(selectCartCount);
 

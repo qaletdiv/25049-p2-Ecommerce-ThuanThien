@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, type Product } from "@/data/products";
 import WishlistButton from "@/app/components/shop/WishlistButton";
-import BuyNowButton from "@/app/components/cart/BuyNowButton";
+import AddToCartButton from "@/app/components/cart/AddToCartButton";
 
-// buyNow: show a "Mua ngay" button over the bottom of the image (home page "Sản phẩm yêu thích" only).
-export default function ProductCard({ product, buyNow = false }: { product: Product; buyNow?: boolean }) {
+// addToCart: show a "Thêm vào giỏ hàng" button over the bottom of the image (home page "Sản phẩm yêu thích" only).
+export default function ProductCard({ product, addToCart = false }: { product: Product; addToCart?: boolean }) {
   const salePrice =
     product.price * (1 - product.discountPercentage / 100);
 
@@ -39,7 +39,7 @@ export default function ProductCard({ product, buyNow = false }: { product: Prod
       <WishlistButton productId={product.id} className="absolute top-2 right-2" />
 
       {/* Also outside the link, over the bottom of the image. */}
-      {buyNow && <BuyNowButton productId={product.id} productTitle={product.title} />}
+      {addToCart && <AddToCartButton productId={product.id} productTitle={product.title} />}
 
       {/* Price on the left, rating on the right. On narrow cards the rating wraps to the next line. */}
       <div className="mt-1 flex flex-wrap items-baseline justify-between gap-x-2">

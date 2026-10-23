@@ -18,6 +18,13 @@ export type Product = {
   images: string[];
   thumbnail: string;
   reviews: Review[];
+  // Specifications (detail page). Some products have no brand. Text values are in English, shown as-is.
+  brand?: string;
+  sku?: string;
+  dimensions?: { width: number; height: number; depth: number };
+  warrantyInformation?: string;
+  shippingInformation?: string;
+  returnPolicy?: string;
 };
 export const categoryLabels: Record<string, string> = {
   beauty: "Làm đẹp",

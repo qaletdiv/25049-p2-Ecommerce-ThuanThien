@@ -143,6 +143,13 @@ export default function CheckoutPage() {
   };
 
   const loading = loadingProducts || status === "idle" || status === "loading";
+  const cartEmpty = !loading && lines.length === 0;
+
+  // Checkout needs items in the cart: an empty cart goes back to /cart.
+  // Not after placing an order (the cart is emptied on purpose then).
+  useEffect(() => {
+    if (cartEmpty && !placed) router.replace("/cart");
+  }, [cartEmpty, placed, router]);
 
   if (placed) {
     return <p className="mx-auto w-full max-w-7xl px-4 py-10 text-muted">Đang chuyển tới đơn hàng của bạn...</p>;
@@ -154,13 +161,8 @@ export default function CheckoutPage() {
 
       {loading ? (
         <p className="mt-8 text-muted">Đang tải...</p>
-      ) : lines.length === 0 ? (
-        <p className="mt-8 text-muted">
-          Giỏ hàng đang trống.{" "}
-          <Link href="/products" className="text-foreground underline underline-offset-4">
-            Xem sản phẩm
-          </Link>
-        </p>
+      ) : cartEmpty ? (
+        <p className="mt-8 text-muted">Giỏ hàng đang trống. Đang chuyển về giỏ hàng...</p>
       ) : (
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
           <form id="checkout-form" onSubmit={handleSubmit} noValidate className="space-y-6">
@@ -261,7 +263,7 @@ export default function CheckoutPage() {
 
             {/* The button is outside the <form>, so it points to it with form="checkout-form". */}
             <button type="submit" form="checkout-form" disabled={submitting} className={`mt-6 ${buttonClass}`}>
-              {submitting ? "Đang đặt hàng..." : "Đặt hàng"}
+              {submitting ? "Đang đặt hàng..." : "Xác nhận đặt hàng"}
             </button>
             <Link href="/cart" className="mt-4 block text-center text-sm underline underline-offset-4">
               Quay lại giỏ hàng

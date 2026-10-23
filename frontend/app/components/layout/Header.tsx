@@ -12,6 +12,9 @@ import { selectCartCount } from "@/app/store/cartSlice";
 type User = { id: number; username: string; fullName?: string; email: string };
 
 const iconButton = "relative flex h-10 w-10 items-center justify-center text-foreground hover:opacity-70";
+// Text links on the right from lg: "Đăng nhập" / "Đăng ký" or "Tài khoản của tôi" / "Đăng xuất".
+const textLink =
+  "hidden px-2 text-sm whitespace-nowrap text-header-link underline-offset-4 hover:text-header-link-hover hover:underline lg:inline";
 
 function Badge({ count }: { count: number }) {
   return (
@@ -178,18 +181,12 @@ export default function Header() {
 
             {user ? (
               <>
-                <Link
-                  href="/profile"
-                  title={displayName}
-                  className="hidden max-w-56 truncate px-2 text-sm text-header-link hover:text-header-link-hover lg:inline"
-                >
-                  Xin chào,{" "}
-                  <span className="font-semibold text-foreground underline-offset-4 hover:underline">
-                    {displayName}
-                  </span>
+                {/* The name is in the tooltip; the profile page shows it in full. */}
+                <Link href="/profile" title={displayName} className={`${textLink} font-semibold text-foreground`}>
+                  Tài khoản của tôi
                 </Link>
 
-                {/* Between sm and lg the greeting is hidden, so the account icon links to the profile. */}
+                {/* Between sm and lg the text link is hidden, so the account icon links to the profile. */}
                 <Link
                   href="/profile"
                   aria-label="Tài khoản của tôi"
@@ -201,19 +198,29 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="hidden px-2 text-sm text-header-link underline-offset-4 hover:text-header-link-hover hover:underline sm:inline"
+                  className="hidden px-2 text-sm whitespace-nowrap text-header-link underline-offset-4 hover:text-header-link-hover hover:underline sm:inline"
                 >
                   Đăng xuất
                 </button>
               </>
             ) : (
-              <Link
-                href="/login"
-                aria-label="Đăng nhập"
-                className={`${iconButton} hidden sm:flex`}
-              >
-                <UserIcon size={20} />
-              </Link>
+              <>
+                <Link href="/login" className={`${textLink} font-semibold text-foreground`}>
+                  Đăng nhập
+                </Link>
+                <Link href="/register" className={textLink}>
+                  Đăng ký
+                </Link>
+
+                {/* Between sm and lg the text links are hidden, so the account icon links to /login. */}
+                <Link
+                  href="/login"
+                  aria-label="Đăng nhập"
+                  className={`${iconButton} hidden sm:flex lg:hidden`}
+                >
+                  <UserIcon size={20} />
+                </Link>
+              </>
             )}
 
             {/* The /wishlist page sends logged-out users to /login. */}
@@ -335,15 +342,26 @@ export default function Header() {
                   </li>
                 </>
               ) : (
-                <li>
-                  <Link
-                    href="/login"
-                    onClick={() => setMenuOpen(false)}
-                    className="block py-3 text-sm text-header-link"
-                  >
-                    Đăng nhập / Đăng ký
-                  </Link>
-                </li>
+                <>
+                  <li>
+                    <Link
+                      href="/login"
+                      onClick={() => setMenuOpen(false)}
+                      className="block border-b border-border py-3 text-sm font-medium text-header-link"
+                    >
+                      Đăng nhập
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/register"
+                      onClick={() => setMenuOpen(false)}
+                      className="block py-3 text-sm font-medium text-header-link"
+                    >
+                      Đăng ký
+                    </Link>
+                  </li>
+                </>
               )}
             </ul>
           </nav>
