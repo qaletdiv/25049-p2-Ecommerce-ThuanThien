@@ -1,6 +1,4 @@
 const express = require('express')
-const fs = require('node:fs')
-const path = require('node:path')
 const crypto = require('node:crypto')
 const { SignJWT, jwtVerify } = require('jose')
 const app = express();
@@ -1838,7 +1836,6 @@ app.post('/api/products', (req, res) => {
         description: description
     }
     products.push(newProduct);
-    saveData()
 
     res.status(201).json(newProduct)
 })
@@ -1869,7 +1866,6 @@ app.put('/api/products/:id', (req, res) => {
         description: description
     }
     products[productIndex] = updatedProduct;
-    saveData()
 
     res.status(200).json(updatedProduct)
 })
@@ -1895,7 +1891,6 @@ app.patch('/api/products/:id', (req, res) => {
         ...(description !== undefined && { description })
     }
     products[productIndex] = updatedProduct;
-    saveData()
 
     res.status(200).json(updatedProduct)
 })
@@ -1910,7 +1905,6 @@ app.delete('/api/products/:id', (req, res) => {
         })
     }
     products.splice(productIndex, 1);
-    saveData()
 
     // 204: No content
     res.status(204).send();
@@ -1918,7 +1912,7 @@ app.delete('/api/products/:id', (req, res) => {
 
 // ---------- Tài khoản: đăng ký / đăng nhập (JWT) ----------
 // Đăng ký / đăng nhập bằng JWT. Frontend lưu token vào localStorage và gửi lại qua header Authorization.
-// Mảng users bên dưới là dữ liệu mẫu ban đầu; dữ liệu thật được lưu trong data.json (xem "Lưu dữ liệu").
+// Mảng users bên dưới là dữ liệu mẫu, lưu trong bộ nhớ: khởi động lại server là quay về dữ liệu này.
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'dev-secret-doi-khi-deploy')
 
@@ -1973,28 +1967,6 @@ let users = [
         ]
     }
 ]
-
-// ---------- Lưu dữ liệu ra data.json ----------
-// products và users ở trên chỉ là dữ liệu mẫu. Lần đầu chạy (chưa có data.json) server tạo file từ chúng;
-// các lần sau đọc lại từ file. Mỗi lần dữ liệu thay đổi thì gọi saveData().
-// Muốn làm lại từ đầu: xóa data.json. nodemon được cấu hình bỏ qua file này (package.json).
-const DATA_FILE = path.join(__dirname, 'data.json')
-
-// Đơn hàng (dùng ở cuối file). Khai báo ở đây vì saveData() và phần đọc file bên dưới cần nó.
-let orders = []
-
-function saveData() {
-    fs.writeFileSync(DATA_FILE, JSON.stringify({ products, users, orders }, null, 2))
-}
-
-if (fs.existsSync(DATA_FILE)) {
-    const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'))
-    products = data.products ?? products
-    users = data.users ?? users
-    orders = data.orders ?? orders
-} else {
-    saveData()
-}
 
 // Băm mật khẩu bằng scrypt, lưu dạng "salt:hash".
 function hashPassword(password) {
@@ -2095,7 +2067,6 @@ app.post('/api/auth/register', async (req, res) => {
         createdAt: new Date().toISOString(),
     }
     users.push(user)
-    saveData()
 
     // 201: Created
     res.status(201).json({ user: publicUser(user) })
@@ -2142,7 +2113,6 @@ app.put('/api/auth/me', async (req, res) => {
     }
 
     user.email = email
-    saveData()
 
     res.status(200).json({ user: publicUser(user) })
 })
@@ -2163,7 +2133,6 @@ app.put('/api/auth/password', async (req, res) => {
     }
 
     user.password = hashPassword(newPassword)
-    saveData()
 
     res.status(200).json({ message: 'Đổi mật khẩu thành công.' })
 })
@@ -2203,7 +2172,6 @@ app.post('/api/shop/wishlist', async (req, res) => {
     user.wishlist = wishlist.includes(productId)
         ? wishlist.filter(id => id !== productId)
         : [...wishlist, productId]
-    saveData()
 
     res.status(200).json(shopData(user))
 })
@@ -2254,7 +2222,6 @@ app.post('/api/cart', async (req, res) => {
         cart.push({ productId, quantity })
     }
     user.cart = cart
-    saveData()
 
     res.status(200).json(cartData(user))
 })
@@ -2277,7 +2244,6 @@ app.put('/api/cart/:productId', async (req, res) => {
     }
     item.quantity = quantity
     user.cart = cart
-    saveData()
     res.status(200).json(cartData(user))
 })
 
@@ -2292,7 +2258,6 @@ app.delete('/api/cart/:productId', async (req, res) => {
     }
 
     user.cart = cartData(user).cart.filter(i => i.productId !== productId)
-    saveData()
 
     res.status(200).json(cartData(user))
 })
@@ -2303,9 +2268,11 @@ app.delete('/api/cart', async (req, res) => {
     if (!user) return
 
     user.cart = []
-    saveData()
     res.status(200).json(cartData(user))
 })
+
+// Đơn hàng lưu trong bộ nhớ (mất khi khởi động lại server)
+let orders = []
 
 // 1. Lấy danh sách tất cả đơn hàng
 app.get('/api/orders', (req, res) => {
@@ -2349,7 +2316,6 @@ app.post('/api/orders', (req, res) => {
     };
 
     orders.push(newOrder);
-    saveData()
 
     res.status(201).json({
         success: true,
