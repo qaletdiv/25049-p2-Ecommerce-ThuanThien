@@ -18,7 +18,7 @@ export type Product = {
   images: string[];
   thumbnail: string;
   reviews: Review[];
-  // Specifications (detail page). Some products have no brand. Text values are in English, shown as-is.
+  // Thông số (trang chi tiết). Một số sản phẩm không có thương hiệu. Giá trị chữ bằng tiếng Anh, hiển thị nguyên văn.
   brand?: string;
   sku?: string;
   dimensions?: { width: number; height: number; depth: number };

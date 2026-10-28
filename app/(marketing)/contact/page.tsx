@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   const query = encodeURIComponent(store.address);
-  // Google Maps embed without an API key.
+  // Nhúng Google Maps không cần API key.
   const mapEmbedUrl = `https://maps.google.com/maps?q=${query}&z=16&output=embed`;
   const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
 

@@ -7,7 +7,7 @@ import ProductCard from "@/app/components/product/ProductCard";
 import Pagination from "@/app/components/product/Pagination";
 import { categoryLabels, type Product } from "@/data/products";
 
-// Price ranges use the sale price (after discount).
+// Khoảng giá dùng giá bán (sau giảm giá).
 const priceRanges = [
   { value: "under-10", label: "Dưới $10", min: 0, max: 10 },
   { value: "10-50", label: "$10 – $50", min: 10, max: 50 },
@@ -15,7 +15,7 @@ const priceRanges = [
   { value: "over-100", label: "Trên $100", min: 100, max: Infinity },
 ];
 
-// Sort options. Prices are compared after the discount, like the price filter.
+// Các kiểu sắp xếp. Giá được so sánh sau giảm giá, giống bộ lọc giá.
 const sortOptions = [
   { value: "", label: "Nổi bật" },
   { value: "price-asc", label: "Giá: thấp đến cao" },
@@ -25,7 +25,7 @@ const sortOptions = [
   { value: "name", label: "Tên: A – Z" },
 ];
 
-// 12 fills whole rows in the 2-, 3- and 4-column grids.
+// 12 lấp đầy các hàng trong lưới 2, 3 và 4 cột.
 const PAGE_SIZE = 12;
 
 const salePriceOf = (p: Product) => p.price * (1 - p.discountPercentage / 100);
@@ -36,11 +36,11 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  // null = default: open on desktop, hidden on mobile (decided by CSS, so there is no flash on load).
+  // null = mặc định: mở trên desktop, ẩn trên mobile (do CSS quyết định nên không bị nháy khi tải).
   const [filtersOpen, setFiltersOpen] = useState<boolean | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
-  // Search text from the header search bar and the filters all live in the URL:
+  // Từ khóa tìm kiếm từ thanh tìm kiếm ở header và các bộ lọc đều nằm trong URL:
   // /products?q=...&category=...&price=...&rating=...&sort=...&page=...
   const q = (searchParams.get("q") ?? "").trim();
   const category = searchParams.get("category") ?? "";
@@ -49,7 +49,7 @@ export default function ProductsPage() {
   const sort = searchParams.get("sort") ?? "";
 
   useEffect(() => {
-    // "/api/products" goes through the proxy in next.config.ts (the backend has no CORS).
+    // "/api/products" đi qua proxy trong next.config.ts (backend không có CORS).
     fetch("/api/products")
       .then((res) => {
         if (!res.ok) throw new Error("Không tải được danh sách sản phẩm");
@@ -60,8 +60,8 @@ export default function ProductsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Update one filter in the URL and keep the others (and ?q=).
-  // Back to page 1: the old page number may not exist in the new results.
+  // Cập nhật một bộ lọc trong URL và giữ nguyên các bộ lọc khác (và ?q=).
+  // Quay về trang 1: số trang cũ có thể không tồn tại trong kết quả mới.
   const setFilter = (name: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value) params.set(name, value);
@@ -71,7 +71,7 @@ export default function ProductsPage() {
     router.replace(query ? `/products?${query}` : "/products", { scroll: false });
   };
 
-  // Clear category, price and rating (and the page), but keep the search text and the sort order.
+  // Xóa danh mục, giá và đánh giá (và số trang), nhưng giữ từ khóa tìm kiếm và thứ tự sắp xếp.
   const clearFilters = () => {
     const params = new URLSearchParams();
     if (q) params.set("q", q);
@@ -85,7 +85,7 @@ export default function ProductsPage() {
   const keyword = q.toLowerCase();
 
   const results = products.filter((p) => {
-    // Search: match the title or the Vietnamese category label, ignoring case.
+    // Tìm kiếm: khớp tên sản phẩm hoặc tên danh mục tiếng Việt, không phân biệt hoa thường.
     if (
       keyword &&
       !p.title.toLowerCase().includes(keyword) &&
@@ -102,7 +102,7 @@ export default function ProductsPage() {
     return true;
   });
 
-  // filter() already returned a new array, so sorting it in place is fine.
+  // filter() đã trả về mảng mới nên sắp xếp trực tiếp trên nó là được.
   if (sort === "price-asc") results.sort((a, b) => salePriceOf(a) - salePriceOf(b));
   else if (sort === "price-desc") results.sort((a, b) => salePriceOf(b) - salePriceOf(a));
   else if (sort === "rating") results.sort((a, b) => b.rating - a.rating);
@@ -111,14 +111,14 @@ export default function ProductsPage() {
 
   const hasFilters = Boolean(category || price || rating);
 
-  // Pagination: ?page= (1 when missing or invalid), kept between 1 and the last page.
+  // Phân trang: ?page= (là 1 khi thiếu hoặc không hợp lệ), giới hạn trong khoảng 1 đến trang cuối.
   const totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
   const page = Math.min(Math.max(1, Math.floor(Number(searchParams.get("page")) || 1)), totalPages);
   const pageItems = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const first = (page - 1) * PAGE_SIZE + 1;
   const last = (page - 1) * PAGE_SIZE + pageItems.length;
 
-  // URL of another page, keeping the search, filters and sort. Page 1 has no ?page=.
+  // URL của một trang khác, giữ nguyên tìm kiếm, bộ lọc và sắp xếp. Trang 1 không có ?page=.
   const pageHref = (n: number) => {
     const params = new URLSearchParams(searchParams.toString());
     if (n > 1) params.set("page", String(n));
@@ -187,7 +187,7 @@ export default function ProductsPage() {
             </div>
           </div>
 
-          {/* Filter sidebar on the left (stacked above the products on mobile), products on the right. */}
+          {/* Sidebar bộ lọc bên trái (nằm trên danh sách sản phẩm ở mobile), sản phẩm bên phải. */}
           <div className="mt-6 flex flex-col gap-8 md:flex-row">
             <div className="min-w-0 flex-1">
               {results.length === 0 && (

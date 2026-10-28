@@ -3,7 +3,7 @@
 import { useState, type SubmitEvent } from "react";
 import { buttonClass, inputClass, labelClass } from "./styles";
 
-// No backend yet: the form only shows a confirmation message.
+// Chưa có backend: form chỉ hiện thông báo xác nhận.
 export default function ContactForm() {
   const [sent, setSent] = useState(false);
 

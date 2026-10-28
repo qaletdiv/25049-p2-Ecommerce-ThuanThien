@@ -10,7 +10,7 @@ import { useLoginRequired } from "@/app/components/shop/useLoginRequired";
 
 const notFoundMessage = "Không tìm thấy đơn hàng.";
 
-// One order of the logged-in user. Right after checkout it also shows "Đặt hàng thành công".
+// Một đơn hàng của người dùng đã đăng nhập. Ngay sau khi thanh toán còn hiện "Đặt hàng thành công".
 export default function OrderPage() {
   useLoginRequired();
   const router = useRouter();
@@ -23,8 +23,8 @@ export default function OrderPage() {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    // GET /api/orders/:id does not check who is asking, so first find out who is logged in,
-    // then only show the order if it belongs to them.
+    // GET /api/orders/:id không kiểm tra ai đang hỏi, nên trước tiên xác định ai đang đăng nhập,
+    // rồi chỉ hiện đơn hàng nếu nó thuộc về người đó.
     fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
       .then(async (res) => {
         if (res.status === 401) {
@@ -46,7 +46,7 @@ export default function OrderPage() {
       .then((found) => {
         if (!found) return;
         setOrder(found);
-        // Set by the checkout page right after placing this order.
+        // Do trang thanh toán đặt ngay sau khi đặt đơn này.
         if (sessionStorage.getItem("placedOrder") === id) {
           setJustPlaced(true);
           sessionStorage.removeItem("placedOrder");
@@ -69,7 +69,7 @@ export default function OrderPage() {
     return <p className="mx-auto w-full max-w-3xl px-4 py-12 text-muted">Đang tải đơn hàng...</p>;
   }
 
-  // The backend only stores totalPrice; the other lines are worked out from the saved items.
+  // Backend chỉ lưu totalPrice; các dòng còn lại được tính từ danh sách sản phẩm đã lưu.
   const totals = totalsOf(order.items);
 
   return (

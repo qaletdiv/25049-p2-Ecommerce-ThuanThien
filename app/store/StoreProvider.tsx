@@ -6,9 +6,9 @@ import { usePathname } from "next/navigation";
 import { makeStore, useAppDispatch } from "@/app/store/store";
 import { cartCleared, fetchCart } from "@/app/store/cartSlice";
 
-// Redux store for the whole app (today only the cart). Wraps everything in app/layout.tsx.
+// Redux store cho toàn app (hiện chỉ có giỏ hàng). Bọc mọi thứ trong app/layout.tsx.
 export default function StoreProvider({ children }: { children: React.ReactNode }) {
-  // useState(makeStore) runs makeStore once, so the store survives re-renders.
+  // useState(makeStore) chỉ chạy makeStore một lần, nên store được giữ qua các lần re-render.
   const [store] = useState(makeStore);
 
   return (
@@ -19,17 +19,17 @@ export default function StoreProvider({ children }: { children: React.ReactNode 
   );
 }
 
-// Keeps the cart in the store in sync with the backend, the same way ShopProvider does for the wishlist.
+// Đồng bộ giỏ hàng trong store với backend, giống cách ShopProvider làm với danh sách yêu thích.
 function CartSync() {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
 
-  // Load again on every page change (so the cart appears right after logging in).
+  // Tải lại mỗi khi đổi trang (để giỏ hàng hiện ngay sau khi đăng nhập).
   useEffect(() => {
     if (localStorage.getItem("token")) dispatch(fetchCart());
   }, [pathname, dispatch]);
 
-  // Logging out (header, profile page, or token expiry) sends a "logout" event.
+  // Đăng xuất (từ header, trang hồ sơ, hoặc token hết hạn) sẽ gửi sự kiện "logout".
   useEffect(() => {
     const onLogout = () => dispatch(cartCleared());
     window.addEventListener("logout", onLogout);

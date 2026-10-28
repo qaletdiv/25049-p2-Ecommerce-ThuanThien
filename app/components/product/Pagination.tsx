@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// Page numbers to show: always the first and last page, plus the current page and its neighbours.
-// Gaps become "…". Example for page 6 of 10: 1 … 5 6 7 … 10
+// Các số trang cần hiện: luôn có trang đầu và trang cuối, cộng với trang hiện tại và các trang kề bên.
+// Khoảng trống thành "…". Ví dụ trang 6 trên 10: 1 … 5 6 7 … 10
 function pageList(page: number, totalPages: number) {
   const pages: (number | "gap")[] = [];
   for (let p = 1; p <= totalPages; p++) {
@@ -14,8 +14,8 @@ function pageList(page: number, totalPages: number) {
 
 const itemClass = "flex h-10 min-w-10 items-center justify-center border px-3 text-sm";
 
-// "« Trước 1 2 3 Sau »" under the product grid. Plain links, so the page number lives in the URL
-// (back button and shared links work). hrefFor(page) builds the URL for a page.
+// "« Trước 1 2 3 Sau »" dưới lưới sản phẩm. Là link thường nên số trang nằm trong URL
+// (nút quay lại và link chia sẻ đều hoạt động). hrefFor(page) tạo URL cho một trang.
 export default function Pagination({
   page,
   totalPages,

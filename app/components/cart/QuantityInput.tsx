@@ -2,13 +2,13 @@
 
 import { Minus, Plus } from "lucide-react";
 
-// Same limit as MAX_QUANTITY in the backend's auth.js.
+// Cùng giới hạn với MAX_QUANTITY trong auth.js của backend.
 export const MAX_QUANTITY = 99;
 
 const stepButton =
   "flex h-full w-9 items-center justify-center text-foreground hover:bg-surface disabled:opacity-40 disabled:hover:bg-transparent";
 
-// "− 2 +" stepper. Used on the detail page and on each cart row.
+// Bộ tăng giảm "− 2 +". Dùng ở trang chi tiết và trên mỗi dòng giỏ hàng.
 export default function QuantityInput({
   value,
   onChange,

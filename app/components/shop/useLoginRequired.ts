@@ -3,8 +3,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-// For pages that need an account (/wishlist): no token → go to the login page.
-// An expired token is handled by ShopProvider (its next request gets a 401 and logs out).
+// Cho các trang cần tài khoản (/wishlist): không có token → chuyển tới trang đăng nhập.
+// Token hết hạn do ShopProvider xử lý (request tiếp theo nhận 401 và đăng xuất).
 export function useLoginRequired() {
   const router = useRouter();
   useEffect(() => {

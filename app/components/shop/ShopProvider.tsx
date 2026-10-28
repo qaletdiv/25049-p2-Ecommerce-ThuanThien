@@ -3,11 +3,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-// Only the wishlist. The cart lives in the Redux store (app/store/cartSlice.ts).
+// Chỉ có danh sách yêu thích. Giỏ hàng nằm trong Redux store (app/store/cartSlice.ts).
 type ShopData = { wishlist: number[] };
 
 type Shop = ShopData & {
-  // Each action returns true when it worked. Without a login it goes to /login and returns false.
+  // Mỗi thao tác trả về true khi thành công. Chưa đăng nhập thì chuyển tới /login và trả về false.
   toggleWishlist: (productId: number) => Promise<boolean>;
 };
 
@@ -15,14 +15,14 @@ const ShopContext = createContext<Shop | null>(null);
 
 const empty: ShopData = { wishlist: [] };
 
-// Wishlist of the logged-in user, stored on the backend (/api/shop).
-// Shared by the header count, the heart buttons and the wishlist and profile pages.
+// Danh sách yêu thích của người dùng đã đăng nhập, lưu trên backend (/api/shop).
+// Dùng chung cho số đếm trên header, các nút trái tim, trang yêu thích và trang hồ sơ.
 export default function ShopProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<ShopData>(empty);
   const pathname = usePathname();
   const router = useRouter();
 
-  // Load again on every page change, like the header does for the user.
+  // Tải lại mỗi khi đổi trang, giống header làm với người dùng.
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -32,17 +32,17 @@ export default function ShopProvider({ children }: { children: React.ReactNode }
       .catch(() => setData(empty));
   }, [pathname]);
 
-  // Logging out (header, profile page, or token expiry) sends a "logout" event.
+  // Đăng xuất (từ header, trang hồ sơ, hoặc token hết hạn) sẽ gửi sự kiện "logout".
   useEffect(() => {
     const onLogout = () => setData(empty);
     window.addEventListener("logout", onLogout);
     return () => window.removeEventListener("logout", onLogout);
   }, []);
 
-  // Send one change to the backend; the answer is the new { wishlist }.
+  // Gửi một thay đổi lên backend; phản hồi là { wishlist } mới.
   const send = async (path: string, body: object) => {
     const token = localStorage.getItem("token");
-    // The wishlist needs an account.
+    // Danh sách yêu thích cần có tài khoản.
     if (!token) {
       router.push("/login");
       return false;
@@ -54,7 +54,7 @@ export default function ShopProvider({ children }: { children: React.ReactNode }
         body: JSON.stringify(body),
       });
       if (res.status === 401) {
-        // Token expired: log out and go to the login page.
+        // Token hết hạn: đăng xuất và chuyển tới trang đăng nhập.
         localStorage.removeItem("token");
         window.dispatchEvent(new Event("logout"));
         router.push("/login");

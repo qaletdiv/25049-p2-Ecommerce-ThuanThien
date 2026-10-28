@@ -7,11 +7,11 @@ import { useShop } from "@/app/components/shop/ShopProvider";
 import { useLoginRequired } from "@/app/components/shop/useLoginRequired";
 import type { Product } from "@/data/products";
 
-// The products in the wishlist. The heart on each card removes it. Needs a login.
+// Các sản phẩm trong danh sách yêu thích. Nút trái tim trên mỗi thẻ để bỏ nó. Cần đăng nhập.
 export default function WishlistPage() {
   useLoginRequired();
   const { wishlist } = useShop();
-  // The wishlist only stores ids, so fetch the product list to show them.
+  // Danh sách yêu thích chỉ lưu id nên phải lấy danh sách sản phẩm để hiển thị.
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 

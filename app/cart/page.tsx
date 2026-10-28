@@ -13,18 +13,18 @@ import { useAppSelector } from "@/app/store/store";
 import { selectCart, selectCartCount } from "@/app/store/cartSlice";
 import { FREE_SHIPPING_FROM, orderTotals, salePriceOf } from "@/data/orders";
 
-// The cart of the logged-in user. Items live in the Redux store (saved on the backend);
-// every change goes through a thunk and the store gets the new cart from the backend's answer.
+// Giỏ hàng của người dùng đã đăng nhập. Sản phẩm nằm trong Redux store (lưu trên backend);
+// mọi thay đổi đều đi qua thunk và store nhận giỏ hàng mới từ phản hồi của backend.
 export default function CartPage() {
   useLoginRequired();
   const { items, status, error } = useAppSelector(selectCart);
   const count = useAppSelector(selectCartCount);
   const { update, remove, clear } = useCartActions();
 
-  // The cart only stores ids and quantities, so fetch the product list to show them.
+  // Giỏ hàng chỉ lưu id và số lượng nên phải lấy danh sách sản phẩm để hiển thị.
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
-  // Product id being changed (or "all" while clearing), to disable its buttons.
+  // Id sản phẩm đang được thay đổi (hoặc "all" khi đang xóa hết), để vô hiệu hóa các nút của nó.
   const [busy, setBusy] = useState<number | "all" | null>(null);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function CartPage() {
       .finally(() => setLoadingProducts(false));
   }, []);
 
-  // Join each cart line with its product. Lines whose product no longer exists are skipped.
+  // Ghép mỗi dòng giỏ hàng với sản phẩm của nó. Bỏ qua các dòng có sản phẩm không còn tồn tại.
   const lines = items
     .map((item) => ({ ...item, product: products.find((p) => p.id === item.productId) }))
     .filter((line): line is typeof line & { product: Product } => Boolean(line.product));

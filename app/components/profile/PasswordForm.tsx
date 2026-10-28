@@ -15,7 +15,7 @@ const fields: { name: Field; label: string; autoComplete: string }[] = [
 
 const empty = { currentPassword: "", newPassword: "", confirmPassword: "" };
 
-// Change the password of the logged-in user (PUT /api/auth/password).
+// Đổi mật khẩu của người dùng đã đăng nhập (PUT /api/auth/password).
 export default function PasswordForm() {
   const [values, setValues] = useState<Record<Field, string>>(empty);
   const [errors, setErrors] = useState<Partial<Record<Field | "form", string>>>({});
@@ -42,7 +42,7 @@ export default function PasswordForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        // The backend answers { errors: { currentPassword | newPassword: message } }.
+        // Backend trả về { errors: { currentPassword | newPassword: message } }.
         setErrors(data.errors ?? { form: data.message ?? "Đổi mật khẩu thất bại." });
         return;
       }

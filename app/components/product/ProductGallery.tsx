@@ -7,12 +7,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const arrowClass =
   "absolute top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-2 text-foreground shadow transition-opacity hover:bg-white md:opacity-0 md:group-hover:opacity-100 focus-visible:opacity-100";
 
-// Large image with a column of thumbnails on its left; clicking a thumbnail swaps the large image.
-// Hovering the large image zooms in where the mouse is. Products with several images also get prev/next arrows.
+// Ảnh lớn với cột ảnh thu nhỏ bên trái; bấm vào ảnh thu nhỏ để đổi ảnh lớn.
+// Rê chuột lên ảnh lớn sẽ phóng to tại vị trí chuột. Sản phẩm có nhiều ảnh còn có mũi tên trước/sau.
 export default function ProductGallery({ images, title }: { images: string[]; title: string }) {
   const [current, setCurrent] = useState(0);
   const [zoomed, setZoomed] = useState(false);
-  // Zoom origin in percent of the image box, follows the mouse.
+  // Tâm phóng to tính theo phần trăm khung ảnh, đi theo chuột.
   const [origin, setOrigin] = useState("50% 50%");
 
   const hasMany = images.length > 1;
@@ -28,7 +28,7 @@ export default function ProductGallery({ images, title }: { images: string[]; ti
 
   return (
     <div className="flex gap-3">
-      {/* Thumbnails in a column on the left; only shown when there is more than one image. */}
+      {/* Ảnh thu nhỏ xếp thành cột bên trái; chỉ hiện khi có nhiều hơn một ảnh. */}
       {hasMany && (
         <ul className="flex w-16 shrink-0 flex-col gap-2 md:w-20">
           {images.map((src, i) => (

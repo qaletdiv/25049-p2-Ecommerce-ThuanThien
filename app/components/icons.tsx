@@ -1,4 +1,4 @@
-// Simple stroke icons. Decorative only; give the wrapping button or link an aria-label.
+// Icon nét đơn giản. Chỉ để trang trí; hãy đặt aria-label cho nút hoặc link bọc ngoài.
 
 type IconProps = { size?: number; className?: string };
 
@@ -90,7 +90,7 @@ export function MailIcon(props: IconProps) {
   );
 }
 
-// Simple outline glyphs, not official brand logos.
+// Hình viền đơn giản, không phải logo chính thức của thương hiệu.
 export function FacebookIcon(props: IconProps) {
   return (
     <Svg {...props}>

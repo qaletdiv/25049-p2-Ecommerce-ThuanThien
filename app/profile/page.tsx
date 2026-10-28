@@ -12,7 +12,7 @@ import { selectCartCount } from "@/app/store/cartSlice";
 
 type User = { id: number; username: string; fullName?: string; email: string; createdAt?: string };
 
-// Categories shown inside this page. Wishlist and cart are separate pages, so they are plain links.
+// Các mục hiển thị trong trang này. Yêu thích và giỏ hàng là trang riêng nên chỉ là link thường.
 type Tab = "info" | "orders" | "password";
 const tabs: { id: Tab; label: string; Icon: typeof UserIcon }[] = [
   { id: "info", label: "Thông tin tài khoản", Icon: UserIcon },
@@ -27,7 +27,7 @@ export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState("");
   const router = useRouter();
-  // /profile?tab=orders opens the order history (link on the order page). Other values → "info".
+  // /profile?tab=orders mở lịch sử đơn hàng (link ở trang đơn hàng). Giá trị khác → "info".
   const searchParams = useSearchParams();
   const [tab, setTab] = useState<Tab>(() => {
     const fromUrl = searchParams.get("tab");
@@ -36,7 +36,7 @@ export default function ProfilePage() {
   const { wishlist } = useShop();
   const cartCount = useAppSelector(selectCartCount);
 
-  // Who is logged in? Same call as the header. No token or an invalid one: go to the login page.
+  // Ai đang đăng nhập? Cùng lời gọi với header. Không có token hoặc token không hợp lệ: chuyển tới trang đăng nhập.
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -59,7 +59,7 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    // Tell the header to forget the user.
+    // Báo header bỏ thông tin người dùng.
     window.dispatchEvent(new Event("logout"));
     router.push("/");
   };
@@ -71,7 +71,7 @@ export default function ProfilePage() {
     return <p className="mx-auto w-full max-w-5xl px-4 py-12 text-muted">Đang tải thông tin tài khoản...</p>;
   }
 
-  // Accounts made before the name field existed have no fullName.
+  // Tài khoản tạo trước khi có trường tên thì không có fullName.
   const displayName = user.fullName || user.username;
 
   return (
@@ -93,7 +93,7 @@ export default function ProfilePage() {
             </span>
           </div>
 
-          {/* A scrolling row on mobile, a vertical menu from md. */}
+          {/* Hàng cuộn ngang trên mobile, menu dọc từ md. */}
           <nav aria-label="Danh mục tài khoản" className="mt-4 border border-border">
             <ul className="flex overflow-x-auto md:flex-col md:divide-y md:divide-border">
               {tabs.map(({ id, label, Icon }) => (
@@ -158,7 +158,7 @@ export default function ProfilePage() {
 
           {tab === "orders" && <OrderList userId={user.id} />}
 
-          {/* The email cannot be changed; only the password. */}
+          {/* Không đổi được email; chỉ đổi được mật khẩu. */}
           {tab === "password" && <PasswordForm />}
         </div>
       </div>

@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/app/store/store";
 import { addToCart, clearCart, removeFromCart, updateCartQuantity } from "@/app/store/cartSlice";
 
-// What dispatch(someThunk(...)) resolves to: the fulfilled or rejected action.
+// Giá trị mà dispatch(someThunk(...)) trả về: action fulfilled hoặc rejected.
 type ThunkResult = { meta: { requestStatus: "fulfilled" | "rejected" }; payload?: unknown };
 
-// Cart actions for components. Each returns true when it worked.
-// Not logged in (or the token expired) → goes to /login and returns false.
+// Các thao tác giỏ hàng cho component. Mỗi hàm trả về true khi thành công.
+// Chưa đăng nhập (hoặc token hết hạn) → chuyển tới /login và trả về false.
 export function useCartActions() {
   const dispatch = useAppDispatch();
   const router = useRouter();

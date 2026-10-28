@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Giới thiệu",
 };
 
-// Placeholder content until the real store information is ready.
+// Nội dung tạm cho đến khi có thông tin thật của cửa hàng.
 const values = [
   {
     title: "Sản phẩm chọn lọc",

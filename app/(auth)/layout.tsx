@@ -1,4 +1,4 @@
-// Shared layout for /login and /register: a pastel brand panel on the left (desktop only), the form on the right.
+// Layout chung cho /login và /register: panel thương hiệu màu pastel bên trái (chỉ trên desktop), form bên phải.
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="mx-auto grid w-full max-w-7xl flex-1 md:grid-cols-2">

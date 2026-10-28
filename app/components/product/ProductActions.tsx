@@ -11,8 +11,8 @@ import { useCartActions } from "@/app/components/cart/useCartActions";
 const outlineButton =
   "w-full border border-foreground px-6 py-3 text-sm font-semibold text-foreground hover:bg-surface disabled:opacity-50";
 
-// Detail page: quantity, "Thêm vào giỏ", "Mua ngay" and the heart.
-// Both cart buttons save to the backend through the Redux thunk; logged out → /login.
+// Trang chi tiết: số lượng, "Thêm vào giỏ", "Mua ngay" và nút trái tim.
+// Cả hai nút giỏ hàng đều lưu lên backend qua Redux thunk; chưa đăng nhập → /login.
 export default function ProductActions({ productId }: { productId: number }) {
   const { add } = useCartActions();
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function ProductActions({ productId }: { productId: number }) {
     setMessage(null);
     const ok = await add(productId, quantity);
     setBusy(false);
-    // Not logged in: useCartActions already went to /login.
+    // Chưa đăng nhập: useCartActions đã chuyển tới /login.
     if (!ok) {
       if (localStorage.getItem("token")) setMessage("error");
       return;

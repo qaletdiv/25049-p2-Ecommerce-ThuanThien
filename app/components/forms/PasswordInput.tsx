@@ -4,13 +4,13 @@ import { useState, type InputHTMLAttributes } from "react";
 import { EyeIcon, EyeOffIcon } from "@/app/components/icons";
 import { inputClass } from "@/app/components/forms/styles";
 
-// Password field with a show/hide button. Takes the same props as <input>.
+// Ô mật khẩu có nút hiện/ẩn. Nhận cùng props với <input>.
 export default function PasswordInput(props: Omit<InputHTMLAttributes<HTMLInputElement>, "type">) {
   const [visible, setVisible] = useState(false);
 
   return (
     <div className="relative mt-1">
-      {/* The wrapper carries the top margin so the eye button lines up with the input. */}
+      {/* Phần bọc ngoài chịu margin trên để nút con mắt thẳng hàng với ô nhập. */}
       <input {...props} type={visible ? "text" : "password"} className={`${inputClass.replace("mt-1 ", "")} pr-10`} />
       <button
         type="button"

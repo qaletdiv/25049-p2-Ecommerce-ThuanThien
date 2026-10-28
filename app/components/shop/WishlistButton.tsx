@@ -4,7 +4,7 @@ import { useState } from "react";
 import { HeartIcon } from "@/app/components/icons";
 import { useShop } from "@/app/components/shop/ShopProvider";
 
-// Heart button: adds or removes a product from the wishlist. Logged out → goes to /login.
+// Nút trái tim: thêm hoặc bỏ sản phẩm khỏi danh sách yêu thích. Chưa đăng nhập → chuyển tới /login.
 export default function WishlistButton({ productId, className = "" }: { productId: number; className?: string }) {
   const { wishlist, toggleWishlist } = useShop();
   const [busy, setBusy] = useState(false);
