@@ -36,7 +36,7 @@ export default function HeroBanner() {
     <section className="w-full">
       <div className="group relative aspect-[3/1] w-full overflow-hidden bg-gray-100">
 
-        {/* Banner Images */}
+        {/* Ảnh banner */}
         {banners.map((banner, index) => (
           <Image
             key={banner}
@@ -58,7 +58,7 @@ export default function HeroBanner() {
           />
         ))}
 
-        {/* Left Arrow */}
+        {/* Mũi tên trái */}
         <button
           type="button"
           onClick={prevSlide}
@@ -82,7 +82,7 @@ export default function HeroBanner() {
           <ChevronLeft size={26} />
         </button>
 
-        {/* Right Arrow */}
+        {/* Mũi tên phải */}
         <button
           type="button"
           onClick={nextSlide}
@@ -106,7 +106,7 @@ export default function HeroBanner() {
           <ChevronRight size={26} />
         </button>
 
-        {/* Slider Dots */}
+        {/* Chấm chuyển slide */}
         <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
           {banners.map((_, index) => (
             <button

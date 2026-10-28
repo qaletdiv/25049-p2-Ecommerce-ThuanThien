@@ -11,16 +11,16 @@ async function getProducts(): Promise<Product[]> {
   return res.json();
 }
 
-// Pre-render one page per product at build time.
+// Render sẵn một trang cho mỗi sản phẩm lúc build.
 export async function generateStaticParams() {
   const products = await getProducts();
-  // Route params are strings; the backend id is a number.
+  // Tham số route là chuỗi; id ở backend là số.
   return products.map((p) => ({ id: String(p.id) }));
 }
 
 export default async function ProductDetailPage({ params }: PageProps<"/products/[id]">) {
   const { id } = await params;
-  // The backend has no /api/products/:id, so find it in the full list.
+  // Backend không có /api/products/:id nên tìm trong danh sách đầy đủ.
   const products = await getProducts();
   const product = products.find((p) => String(p.id) === id);
 
@@ -32,7 +32,7 @@ export default async function ProductDetailPage({ params }: PageProps<"/products
   const onSale = product.discountPercentage > 0;
   const categoryLabel = categoryLabels[product.category] ?? product.category;
   const images = product.images.length > 0 ? product.images : [product.thumbnail];
-  // Specifications table: only the fields this product has.
+  // Bảng thông số: chỉ các trường mà sản phẩm này có.
   const specs = [
     { label: "Thương hiệu", value: product.brand },
     { label: "Mã sản phẩm (SKU)", value: product.sku },
@@ -46,7 +46,7 @@ export default async function ProductDetailPage({ params }: PageProps<"/products
     { label: "Vận chuyển", value: product.shippingInformation },
     { label: "Đổi trả", value: product.returnPolicy },
   ].filter((s) => s.value);
-  // Up to 4 other products from the same category.
+  // Tối đa 4 sản phẩm khác cùng danh mục.
   const related = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
 
   return (

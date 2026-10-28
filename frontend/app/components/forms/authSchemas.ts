@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-// Validation rules for the forms (login and register use the same rules as the backend's server.js).
+// Quy tắc kiểm tra cho các form (đăng nhập và đăng ký dùng cùng quy tắc với server.js của backend).
 
 export const loginSchema = yup.object({
   username: yup.string().trim().required("Vui lòng nhập tên đăng nhập hoặc email."),
@@ -12,7 +12,7 @@ export const registerSchema = yup.object({
     .string()
     .trim()
     .required("Vui lòng nhập họ và tên.")
-    // Same rule as the backend: 2–50 letters (Vietnamese accents included) and spaces.
+    // Cùng quy tắc với backend: 2–50 chữ cái (kể cả dấu tiếng Việt) và khoảng trắng.
     .matches(/^[\p{L} ]{2,50}$/u, "Họ và tên gồm 2–50 ký tự, chỉ chữ cái và khoảng trắng."),
   username: yup
     .string()
@@ -27,7 +27,7 @@ export const registerSchema = yup.object({
     .oneOf([yup.ref("password")], "Mật khẩu xác nhận không khớp."),
 });
 
-// Profile page: change password (same length rule as register).
+// Trang hồ sơ: đổi mật khẩu (cùng quy tắc độ dài với đăng ký).
 export const passwordSchema = yup.object({
   currentPassword: yup.string().required("Vui lòng nhập mật khẩu hiện tại."),
   newPassword: yup.string().required("Vui lòng nhập mật khẩu mới.").min(6, "Mật khẩu phải có ít nhất 6 ký tự."),
@@ -37,7 +37,7 @@ export const passwordSchema = yup.object({
     .oneOf([yup.ref("newPassword")], "Mật khẩu xác nhận không khớp."),
 });
 
-// Checkout form. The backend does not check these fields, so the frontend is the only check.
+// Form thanh toán. Backend không kiểm tra các trường này nên frontend là nơi kiểm tra duy nhất.
 export const checkoutSchema = yup.object({
   customerName: yup
     .string()
@@ -47,7 +47,7 @@ export const checkoutSchema = yup.object({
   phoneNumber: yup
     .string()
     .required("Vui lòng nhập số điện thoại.")
-    // Spaces, dots and dashes are allowed while typing; they are removed before sending.
+    // Cho phép khoảng trắng, dấu chấm và gạch ngang khi nhập; chúng bị xóa trước khi gửi.
     .test("phone", "Số điện thoại gồm 10 chữ số, bắt đầu bằng 0.", (v) => /^0\d{9}$/.test((v ?? "").replace(/[\s.-]/g, ""))),
   address: yup
     .string()
@@ -58,8 +58,8 @@ export const checkoutSchema = yup.object({
   paymentMethod: yup.string().oneOf(["cod", "bank"], "Vui lòng chọn phương thức thanh toán."),
 });
 
-// Run a schema and turn yup's errors into { field: message } (first message per field).
-// Returns an empty object when everything is valid.
+// Chạy một schema và chuyển lỗi của yup thành { field: message } (thông báo đầu tiên của mỗi trường).
+// Trả về object rỗng khi mọi thứ hợp lệ.
 export async function validateForm(schema: yup.AnyObjectSchema, values: object): Promise<Record<string, string>> {
   try {
     await schema.validate(values, { abortEarly: false });

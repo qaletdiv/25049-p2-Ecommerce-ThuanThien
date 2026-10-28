@@ -4,7 +4,7 @@ import { formatPrice, type Product } from "@/data/products";
 import WishlistButton from "@/app/components/shop/WishlistButton";
 import AddToCartButton from "@/app/components/cart/AddToCartButton";
 
-// addToCart: show a "Thêm vào giỏ hàng" button over the bottom of the image (home page "Sản phẩm yêu thích" only).
+// addToCart: hiện nút "Thêm vào giỏ hàng" đè lên phần dưới ảnh (chỉ ở mục "Sản phẩm yêu thích" trên trang chủ).
 export default function ProductCard({ product, addToCart = false }: { product: Product; addToCart?: boolean }) {
   const salePrice =
     product.price * (1 - product.discountPercentage / 100);
@@ -35,13 +35,13 @@ export default function ProductCard({ product, addToCart = false }: { product: P
         </h3>
       </Link>
 
-      {/* Outside the link (a button cannot sit inside <a>), placed over the image's top-right corner. */}
+      {/* Nằm ngoài link (button không được nằm trong <a>), đặt đè lên góc trên bên phải của ảnh. */}
       <WishlistButton productId={product.id} className="absolute top-2 right-2" />
 
-      {/* Also outside the link, over the bottom of the image. */}
+      {/* Cũng nằm ngoài link, đè lên phần dưới ảnh. */}
       {addToCart && <AddToCartButton productId={product.id} productTitle={product.title} />}
 
-      {/* Price on the left, rating on the right. On narrow cards the rating wraps to the next line. */}
+      {/* Giá bên trái, đánh giá bên phải. Trên thẻ hẹp thì đánh giá xuống dòng. */}
       <div className="mt-1 flex flex-wrap items-baseline justify-between gap-x-2">
         <p className="text-sm">
           <span className="font-semibold">

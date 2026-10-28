@@ -12,7 +12,7 @@ import { selectCartCount } from "@/app/store/cartSlice";
 type User = { id: number; username: string; fullName?: string; email: string };
 
 const iconButton = "relative flex h-10 w-10 items-center justify-center text-foreground hover:opacity-70";
-// Text links on the right from lg: "Đăng nhập" / "Đăng ký" or "Tài khoản của tôi" / "Đăng xuất".
+// Link chữ bên phải từ lg: "Đăng nhập" / "Đăng ký" hoặc "Tài khoản của tôi" / "Đăng xuất".
 const textLink =
   "hidden px-2 text-sm whitespace-nowrap text-header-link underline-offset-4 hover:text-header-link-hover hover:underline lg:inline";
 
@@ -42,18 +42,18 @@ export default function Header() {
   const router = useRouter();
   const { wishlist } = useShop();
   const wishlistCount = wishlist.length;
-  // Total pieces in the cart, from the Redux store (loaded from the backend by StoreProvider).
+  // Tổng số món trong giỏ hàng, lấy từ Redux store (StoreProvider tải từ backend).
   const cartCount = useAppSelector(selectCartCount);
 
-  // Send the JWT from localStorage to the backend to find out who is logged in.
-  // Runs again on every page change, so the header updates right after logging in or registering.
+  // Gửi JWT trong localStorage lên backend để biết ai đang đăng nhập.
+  // Chạy lại mỗi khi đổi trang, để header cập nhật ngay sau khi đăng nhập hoặc đăng ký.
   useEffect(() => {
     const token = localStorage.getItem("token");
-    // No token: not logged in (user is already null; logout clears it too).
+    // Không có token: chưa đăng nhập (user đã là null; đăng xuất cũng xóa nó).
     if (!token) return;
 
-    // Log out automatically when the token expires (1 hour after login).
-    // The middle part of the JWT is base64url JSON with "exp" in seconds.
+    // Tự động đăng xuất khi token hết hạn (1 giờ sau khi đăng nhập).
+    // Phần giữa của JWT là JSON mã hóa base64url, có "exp" tính bằng giây.
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       const payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
@@ -64,12 +64,12 @@ export default function Header() {
         router.push("/login");
       }, payload.exp * 1000 - Date.now());
     } catch {
-      // Not a valid JWT: /api/auth/me below will reject it.
+      // Không phải JWT hợp lệ: /api/auth/me bên dưới sẽ từ chối.
     }
 
     fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
-        // Token is invalid or expired: forget it.
+        // Token không hợp lệ hoặc hết hạn: bỏ nó đi.
         if (!res.ok) localStorage.removeItem("token");
         return res.ok ? res.json() : { user: null };
       })
@@ -79,18 +79,18 @@ export default function Header() {
     return () => clearTimeout(timer);
   }, [pathname, router]);
 
-  // Other pages (e.g. /profile) log out by removing the token and sending a "logout" event.
+  // Các trang khác (ví dụ /profile) đăng xuất bằng cách xóa token và gửi sự kiện "logout".
   useEffect(() => {
     const onLogout = () => setUser(null);
     window.addEventListener("logout", onLogout);
     return () => window.removeEventListener("logout", onLogout);
   }, []);
 
-  // Greet by full name; accounts made before the name field only have a username.
+  // Chào bằng họ tên; tài khoản tạo trước khi có trường tên thì chỉ có username.
   const displayName = user?.fullName || user?.username;
 
   const handleLogout = () => {
-    // Logging out only means forgetting the token (the "logout" event clears the wishlist too).
+    // Đăng xuất chỉ là bỏ token đi (sự kiện "logout" cũng xóa danh sách yêu thích).
     localStorage.removeItem("token");
     setUser(null);
     window.dispatchEvent(new Event("logout"));
@@ -98,7 +98,7 @@ export default function Header() {
     router.push("/");
   };
 
-  // Close the mobile menu and the search bar on Escape.
+  // Đóng menu mobile và thanh tìm kiếm khi nhấn Escape.
   useEffect(() => {
     if (!menuOpen && !searchOpen) return;
     const onKey = (e: KeyboardEvent) => {
@@ -124,7 +124,7 @@ export default function Header() {
             Northline
           </Link>
 
-          {/* Mobile Menu Button */}
+          {/* Nút menu mobile */}
           <button
             type="button"
             aria-label={menuOpen ? "Đóng menu" : "Mở menu"}
@@ -136,7 +136,7 @@ export default function Header() {
             {menuOpen ? <CloseIcon size={22} /> : <MenuIcon size={22} />}
           </button>
 
-          {/* Desktop Menu */}
+          {/* Menu desktop */}
           <nav
             aria-label="Menu chính"
             className="hidden items-center gap-6 md:flex"
@@ -162,7 +162,7 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Right Icons */}
+          {/* Icon bên phải */}
           <div className="ml-auto flex items-center justify-end gap-1">
             <button
               type="button"
@@ -181,12 +181,12 @@ export default function Header() {
 
             {user ? (
               <>
-                {/* The name is in the tooltip; the profile page shows it in full. */}
+                {/* Tên nằm trong tooltip; trang hồ sơ hiện đầy đủ. */}
                 <Link href="/profile" title={displayName} className={`${textLink} font-semibold text-foreground`}>
                   Tài khoản của tôi
                 </Link>
 
-                {/* Between sm and lg the text link is hidden, so the account icon links to the profile. */}
+                {/* Từ sm đến lg link chữ bị ẩn, nên icon tài khoản dẫn tới trang hồ sơ. */}
                 <Link
                   href="/profile"
                   aria-label="Tài khoản của tôi"
@@ -212,7 +212,7 @@ export default function Header() {
                   Đăng ký
                 </Link>
 
-                {/* Between sm and lg the text links are hidden, so the account icon links to /login. */}
+                {/* Từ sm đến lg các link chữ bị ẩn, nên icon tài khoản dẫn tới /login. */}
                 <Link
                   href="/login"
                   aria-label="Đăng nhập"
@@ -223,7 +223,7 @@ export default function Header() {
               </>
             )}
 
-            {/* The /wishlist page sends logged-out users to /login. */}
+            {/* Trang /wishlist chuyển người chưa đăng nhập tới /login. */}
             <Link
               href="/wishlist"
               aria-label={`Yêu thích, ${wishlistCount} sản phẩm`}
@@ -233,7 +233,7 @@ export default function Header() {
               <Badge count={wishlistCount} />
             </Link>
 
-            {/* The /cart page sends logged-out users to /login. */}
+            {/* Trang /cart chuyển người chưa đăng nhập tới /login. */}
             <Link
               href="/cart"
               aria-label={`Giỏ hàng, ${cartCount} sản phẩm`}
@@ -245,7 +245,7 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Search */}
+        {/* Tìm kiếm */}
         {searchOpen && (
           <div
             id="header-search"
@@ -284,7 +284,7 @@ export default function Header() {
           </div>
         )}
 
-        {/* Mobile Menu */}
+        {/* Menu mobile */}
         {menuOpen && (
           <nav
             id="mobile-menu"
@@ -304,7 +304,7 @@ export default function Header() {
                 </li>
               ))}
 
-              {/* The heart icon is hidden below sm, so the wishlist gets a menu item. */}
+              {/* Icon trái tim bị ẩn dưới sm, nên danh sách yêu thích có một mục trong menu. */}
               <li className="sm:hidden">
                 <Link
                   href="/wishlist"

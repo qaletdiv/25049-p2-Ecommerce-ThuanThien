@@ -27,9 +27,9 @@ const paymentHints: Record<PaymentMethod, string> = {
   bank: "Thông tin tài khoản sẽ hiện sau khi đặt hàng. Nội dung chuyển khoản là mã đơn hàng.",
 };
 
-// Shipping info + payment method, then POST /api/orders. The backend saves what it is sent
-// (it does not compute prices or empty the cart), so this page builds the items and the total,
-// then empties the cart itself.
+// Thông tin giao hàng + phương thức thanh toán, rồi POST /api/orders. Backend lưu đúng những gì được gửi
+// (không tự tính giá hay làm trống giỏ hàng), nên trang này tự tạo danh sách sản phẩm và tổng tiền,
+// rồi tự làm trống giỏ hàng.
 export default function CheckoutPage() {
   useLoginRequired();
   const router = useRouter();
@@ -38,12 +38,12 @@ export default function CheckoutPage() {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
-  // The backend needs the user's id in the order (idUser).
+  // Backend cần id người dùng trong đơn hàng (idUser).
   const [userId, setUserId] = useState<number | null>(null);
   const [values, setValues] = useState<Values>({ customerName: "", phoneNumber: "", address: "", paymentMethod: "cod" });
   const [errors, setErrors] = useState<Partial<Record<Field | "form", string>>>({});
   const [submitting, setSubmitting] = useState(false);
-  // True after the order is placed, while going to the order page (the cart is empty by then).
+  // True sau khi đặt hàng xong, trong lúc chuyển sang trang đơn hàng (lúc đó giỏ hàng đã trống).
   const [placed, setPlaced] = useState(false);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function CheckoutPage() {
       .finally(() => setLoadingProducts(false));
   }, []);
 
-  // Who is ordering: the id goes into the order, the name fills in the form (it can still be changed).
+  // Ai đang đặt hàng: id đưa vào đơn hàng, tên điền sẵn vào form (vẫn có thể sửa).
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -104,7 +104,7 @@ export default function CheckoutPage() {
       phoneNumber: values.phoneNumber.replace(/[\s.-]/g, ""),
       address: values.address.trim().replace(/\s+/g, " "),
       paymentMethod: values.paymentMethod,
-      // Copied into the order so it still shows the same title and price if the product changes later.
+      // Chép vào đơn hàng để vẫn hiện đúng tên và giá nếu sau này sản phẩm thay đổi.
       items: lines.map(({ productId, quantity, product }) => ({
         productId,
         title: product.title,
@@ -130,9 +130,9 @@ export default function CheckoutPage() {
       }
       const order: Order = data.data;
       setPlaced(true);
-      // Lets the order page show "Đặt hàng thành công".
+      // Để trang đơn hàng hiện "Đặt hàng thành công".
       sessionStorage.setItem("placedOrder", String(order.id));
-      // The backend does not empty the cart, so do it here (this also sets the header badge to 0).
+      // Backend không làm trống giỏ hàng nên làm ở đây (đồng thời đưa số trên header về 0).
       await clear();
       router.push(`/orders/${order.id}`);
     } catch {
@@ -145,8 +145,8 @@ export default function CheckoutPage() {
   const loading = loadingProducts || status === "idle" || status === "loading";
   const cartEmpty = !loading && lines.length === 0;
 
-  // Checkout needs items in the cart: an empty cart goes back to /cart.
-  // Not after placing an order (the cart is emptied on purpose then).
+  // Thanh toán cần có sản phẩm trong giỏ: giỏ trống thì quay về /cart.
+  // Trừ khi vừa đặt hàng xong (lúc đó giỏ hàng được cố ý làm trống).
   useEffect(() => {
     if (cartEmpty && !placed) router.replace("/cart");
   }, [cartEmpty, placed, router]);
@@ -261,7 +261,7 @@ export default function CheckoutPage() {
 
             {errors.form && <p role="alert" className={`mt-4 ${errorClass}`}>{errors.form}</p>}
 
-            {/* The button is outside the <form>, so it points to it with form="checkout-form". */}
+            {/* Nút nằm ngoài <form> nên trỏ tới form bằng form="checkout-form". */}
             <button type="submit" form="checkout-form" disabled={submitting} className={`mt-6 ${buttonClass}`}>
               {submitting ? "Đang đặt hàng..." : "Xác nhận đặt hàng"}
             </button>

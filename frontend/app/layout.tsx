@@ -27,10 +27,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="vi"
       className={`${inter.variable} h-full antialiased`}
     >
-      {/* Browser extensions (Grammarly, ColorZilla...) add attributes to <body> before React loads. */}
+      {/* Tiện ích trình duyệt (Grammarly, ColorZilla...) thêm thuộc tính vào <body> trước khi React tải xong. */}
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        {/* Redux store (cart) and wishlist state, shared by the header and the pages. */}
-        {/* Remembers the current page so the login page can come back to it. Own Suspense: it reads the query string. */}
+        {/* Redux store (giỏ hàng) và state danh sách yêu thích, dùng chung cho header và các trang. */}
+        {/* Ghi nhớ trang hiện tại để trang đăng nhập quay lại được. Có Suspense riêng: nó đọc query string. */}
         <Suspense fallback={null}>
           <LastPageTracker />
         </Suspense>

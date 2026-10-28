@@ -19,14 +19,14 @@ export default function LoginPage() {
     const handleLogin = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Check the fields with yup before calling the backend.
+        // Kiểm tra các trường bằng yup trước khi gọi backend.
         const newErrors: Errors = await validateForm(loginSchema, { username, password });
         setErrors(newErrors);
         if (Object.keys(newErrors).length > 0) return;
 
         setSubmitting(true);
         try {
-            // "/api/auth/login" goes through the proxy to the Express backend, which answers { token, user }.
+            // "/api/auth/login" đi qua proxy tới backend Express, backend trả về { token, user }.
             const res = await fetch("/api/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -38,9 +38,9 @@ export default function LoginPage() {
                 return;
             }
             const data = await res.json();
-            // Keep the JWT in localStorage; the header sends it back as "Authorization: Bearer <token>".
+            // Lưu JWT trong localStorage; header gửi lại dưới dạng "Authorization: Bearer <token>".
             localStorage.setItem("token", data.token);
-            // Back to the page the user was on before coming here (saved by LastPageTracker), or the home page.
+            // Quay lại trang người dùng đang xem trước khi vào đây (do LastPageTracker lưu), hoặc về trang chủ.
             router.push(takeLastPage());
         } catch {
             setErrors({ form: "Không kết nối được máy chủ. Vui lòng thử lại." });

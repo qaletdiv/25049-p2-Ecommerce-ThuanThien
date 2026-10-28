@@ -4,8 +4,8 @@ import Link from "next/link";
 import { formatPrice } from "@/data/products";
 import { statusLabels, type Order } from "@/data/orders";
 
-// The logged-in user's orders, newest first (GET /api/orders/user/:userId).
-// The profile page already checked the login and passes the user's id.
+// Đơn hàng của người dùng đã đăng nhập, mới nhất trước (GET /api/orders/user/:userId).
+// Trang hồ sơ đã kiểm tra đăng nhập và truyền id người dùng vào.
 export default function OrderList({ userId }: { userId: number }) {
     const [orders, setOrders] = useState<Order[] | null>(null);
     const [error, setError] = useState<string | null>(null);

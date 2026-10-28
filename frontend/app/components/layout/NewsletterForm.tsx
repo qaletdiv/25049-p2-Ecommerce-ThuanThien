@@ -2,7 +2,7 @@
 
 import { useState, type SubmitEvent } from "react";
 
-// Client-side stub: no backend call, only shows a thank-you message.
+// Bản tạm phía client: không gọi backend, chỉ hiện lời cảm ơn.
 export default function NewsletterForm() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);

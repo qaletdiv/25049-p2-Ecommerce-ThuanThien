@@ -9,14 +9,14 @@ import {
   TikTokIcon,
 } from "@/app/components/icons";
 
-// Placeholder store info (also used by the contact page).
+// Thông tin cửa hàng tạm (trang liên hệ cũng dùng).
 export const store = {
   address: "123 Đường Lê Lợi, Quận 1, TP. Hồ Chí Minh",
   phone: "0900 000 000",
   email: "hello@northline.vn",
 };
 
-// Only /contact and /login are real pages; the rest are placeholders.
+// Chỉ /contact và /login là trang thật; còn lại là tạm.
 const infoLinks = [
   { label: "FAQ", href: "#" },
   { label: "Tài khoản", href: "/login" },
@@ -37,7 +37,7 @@ const socials = [
   { label: "TikTok", href: "#", Icon: TikTokIcon },
 ];
 
-// Text badges instead of real payment logos.
+// Nhãn chữ thay cho logo thanh toán thật.
 const payments = ["VISA", "Mastercard", "MoMo", "COD"];
 
 function LinkColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
@@ -63,7 +63,7 @@ export default function Footer() {
   return (
     <footer className="mt-16 bg-footer-bg text-footer-text">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
-        {/* 1. Store info */}
+        {/* 1. Thông tin cửa hàng */}
         <div>
           <p className="text-xl font-extrabold tracking-[0.3em] uppercase">Northline</p>
           <address className="mt-4 space-y-2 text-sm not-italic text-muted">
@@ -107,13 +107,13 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* 2. Information */}
+        {/* 2. Thông tin */}
         <LinkColumn title="Thông tin" links={infoLinks} />
 
-        {/* 3. Policies */}
+        {/* 3. Chính sách */}
         <LinkColumn title="Chính sách" links={policyLinks} />
 
-        {/* 4. Email signup */}
+        {/* 4. Đăng ký nhận email */}
         <div>
           <h2 className="text-sm font-semibold tracking-wide uppercase">Đăng ký nhận tin</h2>
           <p className="mt-4 mb-3 text-sm text-muted">
@@ -123,7 +123,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom row */}
+      {/* Hàng dưới cùng */}
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-5">
           <p className="text-xs text-muted">© 2025 Letdiv Copyright</p>

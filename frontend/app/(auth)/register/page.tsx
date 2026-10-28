@@ -24,18 +24,18 @@ export default function RegisterPage() {
 
     const setField = (field: Field, value: string) => {
         setValues((v) => ({ ...v, [field]: value }));
-        // Clear the error of a field as soon as the user edits it.
+        // Xóa lỗi của một trường ngay khi người dùng sửa nó.
         setErrors((e) => ({ ...e, [field]: undefined }));
     };
 
     const handleRegister = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Collapse extra spaces in the name ("  Nguyễn   Văn A " → "Nguyễn Văn A"), like the backend does.
-        // normalize("NFC") joins accents that some keyboards type as separate characters.
+        // Gộp các khoảng trắng thừa trong tên ("  Nguyễn   Văn A " → "Nguyễn Văn A"), giống backend.
+        // normalize("NFC") ghép dấu mà một số bộ gõ nhập thành ký tự riêng.
         const fullName = values.fullName.normalize("NFC").trim().replace(/\s+/g, " ");
 
-        // Check the fields with yup (rules in authSchemas.ts) before calling the backend.
+        // Kiểm tra các trường bằng yup (quy tắc trong authSchemas.ts) trước khi gọi backend.
         const newErrors: Errors = await validateForm(registerSchema, { ...values, fullName });
         setErrors(newErrors);
         if (Object.keys(newErrors).length > 0) return;
@@ -49,13 +49,13 @@ export default function RegisterPage() {
                 body: JSON.stringify(body),
             });
             if (!res.ok) {
-                // The backend answers { errors: { field: message } }, e.g. a username that already exists.
+                // Backend trả về { errors: { field: message } }, ví dụ tên đăng nhập đã tồn tại.
                 const data = await res.json();
                 setErrors(data.errors ?? { form: data.message ?? "Đăng ký thất bại." });
                 return;
             }
 
-            // Show the success message, then go to the login page after 2 seconds.
+            // Hiện thông báo thành công, rồi chuyển sang trang đăng nhập sau 2 giây.
             setSuccess(true);
             setTimeout(() => router.push("/login"), 2000);
         } catch {
@@ -65,7 +65,7 @@ export default function RegisterPage() {
         }
     };
 
-    // Shared props for a field: aria attributes that link the input to its error message.
+    // Props chung cho một trường: thuộc tính aria nối ô nhập với thông báo lỗi của nó.
     const fieldProps = (field: Field) => ({
         id: `register-${field}`,
         value: values[field],

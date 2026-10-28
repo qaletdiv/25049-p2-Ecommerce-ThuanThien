@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const API_URL = process.env.API_URL ?? "http://localhost:5000";
 
 const nextConfig: NextConfig = {
-  // Proxy /api/* to the Express backend so the browser avoids CORS.
+  // Proxy /api/* tới backend Express để trình duyệt tránh lỗi CORS.
   async rewrites() {
     return [
       {

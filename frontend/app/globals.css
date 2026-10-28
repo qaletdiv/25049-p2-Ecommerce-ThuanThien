@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Light theme: light background, near-black text, one accent color. */
+/* Giao diện sáng: nền sáng, chữ gần đen, một màu nhấn. */
 :root {
   --background: #ffffff;
   --foreground: #111111;

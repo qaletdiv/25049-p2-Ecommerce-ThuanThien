@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Tin tức",
 };
 
-// Placeholder articles. The backend has no news API yet.
+// Bài viết tạm. Backend chưa có API tin tức.
 const articles = [
   {
     id: 1,

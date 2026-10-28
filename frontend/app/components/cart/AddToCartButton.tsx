@@ -4,16 +4,16 @@ import { useEffect, useState } from "react";
 import { BagIcon } from "@/app/components/icons";
 import { useCartActions } from "@/app/components/cart/useCartActions";
 
-// "Thêm vào giỏ hàng" over the bottom of a ProductCard image: adds 1 to the cart (saved on the backend)
-// and shows "Đã thêm vào giỏ hàng." for a moment. Logged out → useCartActions goes to /login.
-// From md: a dark bar that slides up when the card is hovered or focused.
-// Below md (no hover on touch): a round bag button in the bottom-right corner, like the heart.
+// Nút "Thêm vào giỏ hàng" đè lên phần dưới ảnh của ProductCard: thêm 1 vào giỏ hàng (lưu trên backend)
+// và hiện "Đã thêm vào giỏ hàng." trong giây lát. Chưa đăng nhập → useCartActions chuyển tới /login.
+// Từ md: một thanh tối trượt lên khi hover hoặc focus vào thẻ.
+// Dưới md (màn cảm ứng không có hover): nút túi tròn ở góc dưới bên phải, giống nút trái tim.
 export default function AddToCartButton({ productId, productTitle }: { productId: number; productTitle: string }) {
   const { add } = useCartActions();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<"added" | "error" | null>(null);
 
-  // Hide "Đã thêm vào giỏ hàng." after 2 seconds.
+  // Ẩn "Đã thêm vào giỏ hàng." sau 2 giây.
   useEffect(() => {
     if (message !== "added") return;
     const timer = setTimeout(() => setMessage(null), 2000);
@@ -26,13 +26,13 @@ export default function AddToCartButton({ productId, productTitle }: { productId
     const ok = await add(productId, 1);
     setBusy(false);
     if (ok) setMessage("added");
-    // Without a token the user is already on the way to /login: no error message.
+    // Không có token thì người dùng đã đang được chuyển tới /login: không hiện lỗi.
     else if (localStorage.getItem("token")) setMessage("error");
   };
 
   return (
-    // Same box as the card image (aspect-[3/4], top of the card). It lets clicks through to the image link;
-    // only the button catches them.
+    // Cùng khung với ảnh của thẻ (aspect-[3/4], phía trên thẻ). Nó cho click xuyên qua tới link ảnh;
+    // chỉ có nút là nhận click.
     <div className="pointer-events-none absolute inset-x-0 top-0 flex aspect-[3/4] flex-col items-end justify-end gap-2 p-2">
       {message === "added" && (
         <p role="status" className="bg-white/95 px-2 py-1 text-xs font-medium text-success shadow">

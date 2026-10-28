@@ -8,16 +8,16 @@ async function getProducts(): Promise<Product[]> {
   return res.json();
 }
 
-// Pre-render one reviews page per product at build time.
+// Render sẵn một trang đánh giá cho mỗi sản phẩm lúc build.
 export async function generateStaticParams() {
   const products = await getProducts();
-  // Route params are strings; the backend id is a number.
+  // Tham số route là chuỗi; id ở backend là số.
   return products.map((p) => ({ id: String(p.id) }));
 }
 
 export default async function ProductReviewsPage({ params }: PageProps<"/products/[id]/reviews">) {
   const { id } = await params;
-  // The backend has no /api/products/:id, so find it in the full list.
+  // Backend không có /api/products/:id nên tìm trong danh sách đầy đủ.
   const products = await getProducts();
   const product = products.find((p) => String(p.id) === id);
 

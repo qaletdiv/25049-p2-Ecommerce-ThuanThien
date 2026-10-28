@@ -1,28 +1,28 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 
-// One line of the cart, as stored on the backend (users.json → user.cart).
+// Một dòng của giỏ hàng, giống cách lưu trên backend (users.json → user.cart).
 export type CartItem = { productId: number; quantity: number };
 
-// Why a thunk failed: no token / expired token, or any other error (backend down, bad input...).
+// Lý do thunk thất bại: không có token / token hết hạn, hoặc lỗi khác (backend sập, dữ liệu sai...).
 export type CartError = "unauthorized" | "failed";
 
 type CartState = {
   items: CartItem[];
-  // "loading" only for the first load, so moving between pages does not flash "Đang tải...".
+  // "loading" chỉ cho lần tải đầu, để khi chuyển trang không bị nháy "Đang tải...".
   status: "idle" | "loading" | "ready" | "failed";
   error: string | null;
 };
 
 const initialState: CartState = { items: [], status: "idle", error: null };
 
-// Thunks with typed rejectWithValue(CartError).
+// Thunk có kiểu cho rejectWithValue(CartError).
 const createCartThunk = createAsyncThunk.withTypes<{ rejectValue: CartError }>();
 
-// Send one request to /api/cart (through the Next.js proxy) and return the new cart.
-// Throws a CartError when it fails.
+// Gửi một request tới /api/cart (qua proxy của Next.js) và trả về giỏ hàng mới.
+// Ném CartError khi thất bại.
 async function sendCart(method: string, path: string, body?: object): Promise<CartItem[]> {
   const token = localStorage.getItem("token");
-  // The cart is saved in the account, so it needs a login.
+  // Giỏ hàng được lưu trong tài khoản nên cần đăng nhập.
   if (!token) throw "unauthorized";
 
   let res: Response;
@@ -36,7 +36,7 @@ async function sendCart(method: string, path: string, body?: object): Promise<Ca
     throw "failed";
   }
   if (res.status === 401) {
-    // Token expired: log out everywhere (header, wishlist, cart all listen for "logout").
+    // Token hết hạn: đăng xuất ở mọi nơi (header, yêu thích, giỏ hàng đều lắng nghe "logout").
     localStorage.removeItem("token");
     window.dispatchEvent(new Event("logout"));
     throw "unauthorized";
@@ -54,7 +54,7 @@ export const fetchCart = createCartThunk("cart/fetch", async (_: void, { rejectW
   }
 });
 
-// Adds `quantity` to the product (the backend adds it to what is already in the cart).
+// Cộng thêm `quantity` cho sản phẩm (backend cộng vào số lượng đã có trong giỏ).
 export const addToCart = createCartThunk(
   "cart/add",
   async ({ productId, quantity }: CartItem, { rejectWithValue }) => {
@@ -96,14 +96,14 @@ export const clearCart = createCartThunk("cart/clear", async (_: void, { rejectW
   }
 });
 
-// The thunks that change the cart. Each answers with the whole new cart from the backend.
+// Các thunk thay đổi giỏ hàng. Mỗi thunk trả về toàn bộ giỏ hàng mới từ backend.
 const changeThunks = [addToCart, updateCartQuantity, removeFromCart, clearCart] as const;
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    // Logging out empties the cart on screen (it stays saved on the backend).
+    // Đăng xuất làm trống giỏ hàng trên màn hình (vẫn được lưu trên backend).
     cartCleared: () => initialState,
   },
   extraReducers: (builder) => {
@@ -137,10 +137,10 @@ const cartSlice = createSlice({
 export const { cartCleared } = cartSlice.actions;
 export default cartSlice.reducer;
 
-// Selectors
+// Selector
 type WithCart = { cart: CartState };
 export const selectCart = (state: WithCart) => state.cart;
 export const selectCartItems = (state: WithCart) => state.cart.items;
-// Total number of pieces (the header badge), not the number of different products.
+// Tổng số món (số trên header), không phải số loại sản phẩm khác nhau.
 export const selectCartCount = (state: WithCart) =>
   state.cart.items.reduce((sum, item) => sum + item.quantity, 0);
