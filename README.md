@@ -2,7 +2,7 @@
 
 Đồ án Ecommerce (Thuận Thiên).
 
-- `backend/` – Express 5 API (sản phẩm, đăng ký / đăng nhập JWT, yêu thích, giỏ hàng, đơn hàng), cổng 5000. Dữ liệu lưu trong `backend/data.json` (tự tạo khi chạy lần đầu).
+- `backend/` – Express 5 API (sản phẩm, đăng ký / đăng nhập JWT, yêu thích, giỏ hàng, đơn hàng), cổng 5000. Dữ liệu chỉ lưu trong bộ nhớ: khởi động lại server là quay về dữ liệu mẫu trong `server.js`.
 - `frontend/` – Next.js (App Router) storefront: trang chủ, danh sách sản phẩm (tìm kiếm, lọc, sắp xếp, phân trang), chi tiết sản phẩm, đăng ký / đăng nhập, giỏ hàng, thanh toán, xác nhận đơn hàng, tài khoản và lịch sử đơn hàng.
 
 ## Chạy backend
